@@ -1,0 +1,21 @@
+.idea
+go.work
+go.work.sum
+
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+.coverage
+coverage-unit.out
+coverage-integration.out
+
+build
+.venv
+dist
+
+# OS
+.DS_Store

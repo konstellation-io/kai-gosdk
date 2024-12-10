@@ -1,0 +1,65 @@
+runner:
+  logger:
+    level: Debug # Info, Debug, Warn, Error, Fatal, Panic
+    encoding: json # console, json
+    output_paths:
+      - stdout
+    error_output_paths:
+      - stderr
+
+metadata:
+  version_tag: Version v1.0.0
+  product_id: Product ID
+  workflow_name: Workflow ID
+  workflow_type: training
+  process_name: Process ID
+  process_type: trigger
+
+nats:
+  url: "nats://localhost:4222"
+  stream: test-stream
+  inputs: test-input
+  output: test-output
+  object_store: ephemeral-storage
+
+minio:
+  internal_folder: ".kai"
+  endpoint: "localhost:9000"
+  client_user: "minio_user"
+  client_password: "minio_password"
+  ssl: false
+  bucket: "test-bucket"
+
+model_registry:
+  folder_name: ".models"
+
+auth:
+  endpoint: "http://auth.kai.local"
+  client: "kai"
+  client_secret: "kai_pwd"
+  realm: "konstellation"
+  
+measurements:
+  endpoint: "localhost:4317"
+  insecure: true
+  timeout: 5
+  metrics_interval: 10
+
+centralized_configuration:
+  global:
+    bucket: global
+  product:
+    bucket: product
+  workflow:
+    bucket: workflow
+  process:
+    bucket: process
+    config:
+      test1: value1
+      test2: value2
+
+predictions:
+  endpoint: localhost:6379
+  username: testuser
+  password: testpassword
+  index: predictionsIdx
