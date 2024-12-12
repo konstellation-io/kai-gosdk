@@ -9,10 +9,10 @@ import (
 
 	"github.com/Masterminds/semver/v3"
 	"github.com/go-logr/logr"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/common"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/errors"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/storage"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/metadata"
+	"github.com/konstellation-io/kai-gosdk/internal/common"
+	"github.com/konstellation-io/kai-gosdk/internal/errors"
+	"github.com/konstellation-io/kai-gosdk/internal/storage"
+	"github.com/konstellation-io/kai-gosdk/sdk/metadata"
 	"github.com/minio/minio-go/v7"
 	"github.com/spf13/viper"
 )
@@ -92,8 +92,8 @@ func (mr *ModelRegistry) RegisterModel(model []byte, name, version, modelFormat 
 		return errors.ErrEmptyModel
 	}
 
-	model_, err := mr.GetModel(name, version)
-	if err == nil && model_ != nil {
+	checkModel, err := mr.GetModel(name, version)
+	if err == nil && checkModel != nil {
 		return errors.ErrModelAlreadyExists
 	}
 

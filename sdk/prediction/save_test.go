@@ -6,7 +6,7 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/prediction"
+	"github.com/konstellation-io/kai-gosdk/sdk/prediction"
 )
 
 func (s *PredictionStoreSuite) TestPredictionStore_Save_ExpectOK() {

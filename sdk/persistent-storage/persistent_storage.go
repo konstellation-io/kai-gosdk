@@ -8,14 +8,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/storage"
+	"github.com/konstellation-io/kai-gosdk/internal/storage"
 
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/metadata"
+	"github.com/konstellation-io/kai-gosdk/sdk/metadata"
 	"github.com/minio/minio-go/v7/pkg/lifecycle"
 
 	"github.com/go-logr/logr"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/common"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/errors"
+	"github.com/konstellation-io/kai-gosdk/internal/common"
+	"github.com/konstellation-io/kai-gosdk/internal/errors"
 	"github.com/minio/minio-go/v7"
 	"github.com/spf13/viper"
 )
@@ -86,7 +86,7 @@ func (ps PersistentStorage) Save(key string, payload []byte, ttlDays ...int) (*O
 		return nil, errors.ErrEmptyPayload
 	}
 
-	err := ps.addLifecycleDeletionRule(key, ttlDays, ctx)
+	err := ps.addLifecycleDeletionRule(ctx, key, ttlDays)
 	if err != nil {
 		return nil, fmt.Errorf("error adding lifecycle deletion rule: %w", err)
 	}
@@ -287,7 +287,7 @@ func (ps PersistentStorage) Delete(key string, version ...string) error {
 	return nil
 }
 
-func (ps PersistentStorage) addLifecycleDeletionRule(key string, ttlDays []int, ctx context.Context) error {
+func (ps PersistentStorage) addLifecycleDeletionRule(ctx context.Context, key string, ttlDays []int) error {
 	if len(ttlDays) > 0 && ttlDays[0] > 0 {
 		lc, err := ps.storageClient.GetBucketLifecycle(ctx, ps.storageBucket)
 		if err != nil {

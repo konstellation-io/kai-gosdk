@@ -4,8 +4,8 @@ import (
 	"sync"
 
 	"github.com/go-logr/logr"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/runner/common"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk"
+	"github.com/konstellation-io/kai-gosdk/runner/common"
+	"github.com/konstellation-io/kai-gosdk/sdk"
 	"github.com/nats-io/nats.go"
 	"go.opentelemetry.io/otel/metric"
 	"google.golang.org/protobuf/types/known/anypb"

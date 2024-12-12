@@ -7,8 +7,8 @@ import (
 	"github.com/nats-io/nats.go"
 	"go.opentelemetry.io/otel/metric"
 
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/runner/common"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk"
+	"github.com/konstellation-io/kai-gosdk/runner/common"
+	"github.com/konstellation-io/kai-gosdk/sdk"
 )
 
 const _taskLoggerName = "[TASK]"

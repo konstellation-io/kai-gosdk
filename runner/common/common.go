@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/viper"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	kaisdk "github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk"
+	kaisdk "github.com/konstellation-io/kai-gosdk/sdk"
 )
 
 const (

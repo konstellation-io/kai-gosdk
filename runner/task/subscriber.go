@@ -16,10 +16,10 @@ import (
 	"go.opentelemetry.io/otel/metric"
 	"google.golang.org/protobuf/proto"
 
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/common"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/errors"
-	kai "github.com/konstellation-io/kai-sdk/go-sdk/v1/protos"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk"
+	"github.com/konstellation-io/kai-gosdk/internal/common"
+	"github.com/konstellation-io/kai-gosdk/internal/errors"
+	kai "github.com/konstellation-io/kai-gosdk/protos"
+	"github.com/konstellation-io/kai-gosdk/sdk"
 )
 
 const _subscriberLoggerName = "[SUBSCRIBER]"
@@ -104,7 +104,7 @@ func (tr *Runner) processMessage(msg *nats.Msg) {
 	requestMsg, err := tr.newRequestMessage(msg.Data)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error parsing msg.data coming from subject %s because is not a valid protobuf: %s", msg.Subject, err)
-		tr.processRunnerError(msg, errMsg, requestMsg.RequestId)
+		tr.processRunnerError(msg, errMsg, requestMsg.GetRequestId())
 
 		return
 	}
@@ -115,17 +115,17 @@ func (tr *Runner) processMessage(msg *nats.Msg) {
 		tr.sdk.Logger.V(1).Info(fmt.Sprintf("%s execution time: %d ms", tr.sdk.Metadata.GetProcess(), executionTime))
 
 		tr.messagesMetric.Record(context.Background(), executionTime,
-			metric.WithAttributeSet(tr.getMetricAttributes(requestMsg.RequestId)),
+			metric.WithAttributeSet(tr.getMetricAttributes(requestMsg.GetRequestId())),
 		)
 	}()
 
 	tr.getLoggerWithName().Info(fmt.Sprintf("New message received with subject %s",
 		msg.Subject))
 
-	handler := tr.getResponseHandler(strings.ToLower(requestMsg.FromNode))
+	handler := tr.getResponseHandler(strings.ToLower(requestMsg.GetFromNode()))
 	if handler == nil {
-		errMsg := fmt.Sprintf("Error missing handler for node %q", requestMsg.FromNode)
-		tr.processRunnerError(msg, errMsg, requestMsg.RequestId)
+		errMsg := fmt.Sprintf("Error missing handler for node %q", requestMsg.GetFromNode())
+		tr.processRunnerError(msg, errMsg, requestMsg.GetRequestId())
 
 		return
 	}
@@ -134,31 +134,31 @@ func (tr *Runner) processMessage(msg *nats.Msg) {
 	hSdk := sdk.ShallowCopyWithRequest(&tr.sdk, requestMsg)
 
 	if tr.preprocessor != nil {
-		err := tr.preprocessor(hSdk, requestMsg.Payload)
+		err := tr.preprocessor(hSdk, requestMsg.GetPayload())
 		if err != nil {
 			errMsg := fmt.Sprintf("Error in node %q executing handler preprocessor for node %q: %s",
-				tr.sdk.Metadata.GetProcess(), requestMsg.FromNode, err)
-			tr.processRunnerError(msg, errMsg, requestMsg.RequestId)
+				tr.sdk.Metadata.GetProcess(), requestMsg.GetFromNode(), err)
+			tr.processRunnerError(msg, errMsg, requestMsg.GetRequestId())
 
 			return
 		}
 	}
 
-	err = handler(hSdk, requestMsg.Payload)
+	err = handler(hSdk, requestMsg.GetPayload())
 	if err != nil {
 		errMsg := fmt.Sprintf("Error in node %q executing handler for node %q: %s",
-			tr.sdk.Metadata.GetProcess(), requestMsg.FromNode, err)
-		tr.processRunnerError(msg, errMsg, requestMsg.RequestId)
+			tr.sdk.Metadata.GetProcess(), requestMsg.GetFromNode(), err)
+		tr.processRunnerError(msg, errMsg, requestMsg.GetRequestId())
 
 		return
 	}
 
 	if tr.postprocessor != nil {
-		err := tr.postprocessor(hSdk, requestMsg.Payload)
+		err := tr.postprocessor(hSdk, requestMsg.GetPayload())
 		if err != nil {
 			errMsg := fmt.Sprintf("Error in node %q executing handler postprocessor for node %q: %s",
-				tr.sdk.Metadata.GetProcess(), requestMsg.FromNode, err)
-			tr.processRunnerError(msg, errMsg, requestMsg.RequestId)
+				tr.sdk.Metadata.GetProcess(), requestMsg.GetFromNode(), err)
+			tr.processRunnerError(msg, errMsg, requestMsg.GetRequestId())
 
 			return
 		}
@@ -246,7 +246,7 @@ func (tr *Runner) getOutputSubject(channel string) string {
 func (tr *Runner) prepareOutputMessage(msg []byte) ([]byte, error) {
 	maxSize, err := tr.getMaxMessageSize()
 	if err != nil {
-		return nil, fmt.Errorf("error getting max message size: %s", err) //nolint:goerr113 // error is wrapped
+		return nil, fmt.Errorf("error getting max message size: %w", err)
 	}
 
 	lenMsg := int64(len(msg))

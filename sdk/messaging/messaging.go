@@ -2,7 +2,7 @@ package messaging
 
 import (
 	"github.com/go-logr/logr"
-	kai "github.com/konstellation-io/kai-sdk/go-sdk/v1/protos"
+	kai "github.com/konstellation-io/kai-gosdk/protos"
 	"github.com/nats-io/nats.go"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
@@ -59,9 +59,9 @@ func (ms Messaging) GetErrorMessage() string {
 }
 
 func (ms Messaging) IsMessageOK() bool {
-	return ms.requestMessage.MessageType == kai.MessageType_OK
+	return ms.requestMessage.GetMessageType() == kai.MessageType_OK
 }
 
 func (ms Messaging) IsMessageError() bool {
-	return ms.requestMessage.MessageType == kai.MessageType_ERROR
+	return ms.requestMessage.GetMessageType() == kai.MessageType_ERROR
 }

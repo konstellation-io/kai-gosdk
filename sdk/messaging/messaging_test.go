@@ -7,7 +7,7 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/common"
+	"github.com/konstellation-io/kai-gosdk/internal/common"
 
 	"github.com/go-logr/logr"
 	"github.com/go-logr/logr/testr"
@@ -18,9 +18,9 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/mocks"
-	kai "github.com/konstellation-io/kai-sdk/go-sdk/v1/protos"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/messaging"
+	"github.com/konstellation-io/kai-gosdk/mocks"
+	kai "github.com/konstellation-io/kai-gosdk/protos"
+	"github.com/konstellation-io/kai-gosdk/sdk/messaging"
 )
 
 type SdkMessagingTestSuite struct {

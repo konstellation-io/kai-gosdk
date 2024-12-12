@@ -3,7 +3,7 @@
 package centralizedconfiguration_test
 
 import (
-	centralizedConfiguration "github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/centralized-configuration"
+	centralizedConfiguration "github.com/konstellation-io/kai-gosdk/sdk/centralized-configuration"
 	"github.com/nats-io/nats.go"
 )
 

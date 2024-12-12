@@ -7,8 +7,8 @@ import (
 	"context"
 
 	"github.com/go-logr/logr"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/common"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/metadata"
+	"github.com/konstellation-io/kai-gosdk/internal/common"
+	"github.com/konstellation-io/kai-gosdk/sdk/metadata"
 	"github.com/spf13/viper"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc"

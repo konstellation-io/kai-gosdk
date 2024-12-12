@@ -4,19 +4,19 @@ import (
 	"context"
 	"os"
 
-	meta "github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/metadata"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/prediction"
+	meta "github.com/konstellation-io/kai-gosdk/sdk/metadata"
+	"github.com/konstellation-io/kai-gosdk/sdk/prediction"
 	"go.opentelemetry.io/otel/metric"
 
-	centralizedConfiguration "github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/centralized-configuration"
-	objectstore "github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/ephemeral-storage"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/measurement"
-	modelregistry "github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/model-registry"
-	persistentstorage "github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/persistent-storage"
+	centralizedConfiguration "github.com/konstellation-io/kai-gosdk/sdk/centralized-configuration"
+	objectstore "github.com/konstellation-io/kai-gosdk/sdk/ephemeral-storage"
+	"github.com/konstellation-io/kai-gosdk/sdk/measurement"
+	modelregistry "github.com/konstellation-io/kai-gosdk/sdk/model-registry"
+	persistentstorage "github.com/konstellation-io/kai-gosdk/sdk/persistent-storage"
 
 	"github.com/go-logr/logr"
-	kai "github.com/konstellation-io/kai-sdk/go-sdk/v1/protos"
-	msg "github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/messaging"
+	kai "github.com/konstellation-io/kai-gosdk/protos"
+	msg "github.com/konstellation-io/kai-gosdk/sdk/messaging"
 	"github.com/nats-io/nats.go"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
@@ -200,7 +200,7 @@ func ShallowCopyWithRequest(sdk *KaiSDK, requestMsg *kai.KaiNatsMessage) KaiSDK 
 	hSdk := *sdk
 	hSdk.requestMessage = requestMsg
 	hSdk.Logger = sdk.Logger.WithValues(LoggerRequestID, requestMsg.GetRequestId())
-	hSdk.Predictions = prediction.NewRedisPredictionStore(requestMsg.RequestId)
+	hSdk.Predictions = prediction.NewRedisPredictionStore(requestMsg.GetRequestId())
 	hSdk.Messaging = msg.New(hSdk.Logger, sdk.nats, sdk.jetstream, requestMsg)
 
 	return hSdk

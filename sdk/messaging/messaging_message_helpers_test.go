@@ -3,8 +3,8 @@
 package messaging_test
 
 import (
-	kai "github.com/konstellation-io/kai-sdk/go-sdk/v1/protos"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/messaging"
+	kai "github.com/konstellation-io/kai-gosdk/protos"
+	"github.com/konstellation-io/kai-gosdk/sdk/messaging"
 )
 
 const (

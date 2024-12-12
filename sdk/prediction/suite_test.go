@@ -9,8 +9,8 @@ import (
 	"testing"
 
 	"github.com/docker/go-connections/nat"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/common"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/prediction"
+	"github.com/konstellation-io/kai-gosdk/internal/common"
+	"github.com/konstellation-io/kai-gosdk/sdk/prediction"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	"github.com/redis/go-redis/v9"

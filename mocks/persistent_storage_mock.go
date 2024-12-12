@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	persistentstorage "github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/persistent-storage"
+	persistentstorage "github.com/konstellation-io/kai-gosdk/sdk/persistent-storage"
 	mock "github.com/stretchr/testify/mock"
 )
 

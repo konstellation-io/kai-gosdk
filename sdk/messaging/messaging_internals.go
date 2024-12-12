@@ -3,7 +3,7 @@ package messaging
 import (
 	"fmt"
 
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/errors"
+	"github.com/konstellation-io/kai-gosdk/internal/errors"
 	"github.com/nats-io/nats.go"
 
 	"github.com/google/uuid"
@@ -11,8 +11,8 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/common"
-	kai "github.com/konstellation-io/kai-sdk/go-sdk/v1/protos"
+	"github.com/konstellation-io/kai-gosdk/internal/common"
+	kai "github.com/konstellation-io/kai-gosdk/protos"
 )
 
 const (
@@ -30,7 +30,7 @@ func (ms Messaging) getOptionalString(values []string) string {
 func (ms Messaging) publishMsg(msg proto.Message, requestID string, msgType kai.MessageType, channel string) error {
 	payload, err := anypb.New(msg)
 	if err != nil {
-		return fmt.Errorf("the handler result is not a valid protobuf: %s", err) //nolint:goerr113 // error is wrapped
+		return fmt.Errorf("the handler result is not a valid protobuf: %w", err)
 	}
 
 	if requestID == "" {
@@ -84,7 +84,7 @@ func (ms Messaging) publishResponse(responseMsg *kai.KaiNatsMessage, channel str
 	if err != nil {
 		ms.logger.WithName(_messagingLoggerName).
 			Error(err, fmt.Sprintf("Error generating output result because "+
-				"handler result is not a serializable Protobuf for request id %s", responseMsg.RequestId))
+				"handler result is not a serializable Protobuf for request id %s", responseMsg.GetRequestId()))
 
 		return
 	}
@@ -92,19 +92,19 @@ func (ms Messaging) publishResponse(responseMsg *kai.KaiNatsMessage, channel str
 	outputMsg, err = ms.prepareOutputMessage(outputMsg)
 	if err != nil {
 		ms.logger.WithName(_messagingLoggerName).
-			Error(err, fmt.Sprintf("Error preparing output message for request id %s", responseMsg.RequestId))
+			Error(err, fmt.Sprintf("Error preparing output message for request id %s", responseMsg.GetRequestId()))
 
 		return
 	}
 
 	ms.logger.WithName(_messagingLoggerName).Info(fmt.Sprintf("Publishing response with subject %s "+
-		"for request id %s", outputSubject, responseMsg.RequestId))
+		"for request id %s", outputSubject, responseMsg.GetRequestId()))
 
 	_, err = ms.jetstream.Publish(outputSubject, outputMsg)
 	if err != nil {
 		ms.logger.WithName(_messagingLoggerName).
 			Error(err, fmt.Sprintf("Error publishing output for"+
-				" request id %s", responseMsg.RequestId))
+				" request id %s", responseMsg.GetRequestId()))
 	}
 }
 
@@ -120,7 +120,7 @@ func (ms Messaging) getOutputSubject(channel string) string {
 func (ms Messaging) prepareOutputMessage(msg []byte) ([]byte, error) {
 	maxSize, err := ms.messagingUtils.GetMaxMessageSize()
 	if err != nil {
-		return nil, fmt.Errorf("error getting max message size: %s", err) //nolint:goerr113 // error is wrapped
+		return nil, fmt.Errorf("error getting max message size: %w", err)
 	}
 
 	lenMsg := int64(len(msg))

@@ -10,9 +10,9 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/common"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/mocks"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/runner"
+	"github.com/konstellation-io/kai-gosdk/internal/common"
+	"github.com/konstellation-io/kai-gosdk/mocks"
+	"github.com/konstellation-io/kai-gosdk/runner"
 )
 
 type SdkRunnerTestSuite struct {

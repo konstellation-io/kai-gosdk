@@ -3,7 +3,7 @@ package messaging
 import (
 	"fmt"
 
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/common"
+	"github.com/konstellation-io/kai-gosdk/internal/common"
 
 	"github.com/nats-io/nats.go"
 	"github.com/spf13/viper"
@@ -14,7 +14,7 @@ type messagingUtils interface {
 	GetMaxMessageSize() (int64, error)
 }
 
-type MessagingUtilsImpl struct {
+type MessagingUtilsImpl struct { //nolint:revive // naming is correct
 	jetstream nats.JetStreamContext
 	nats      *nats.Conn
 }

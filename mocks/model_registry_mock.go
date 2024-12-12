@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	modelregistry "github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/model-registry"
+	modelregistry "github.com/konstellation-io/kai-gosdk/sdk/model-registry"
 	mock "github.com/stretchr/testify/mock"
 )
 

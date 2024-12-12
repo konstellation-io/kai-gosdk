@@ -4,7 +4,7 @@ package messaging
 
 import (
 	"github.com/go-logr/logr"
-	kai "github.com/konstellation-io/kai-sdk/go-sdk/v1/protos"
+	kai "github.com/konstellation-io/kai-gosdk/protos"
 	"github.com/nats-io/nats.go"
 )
 

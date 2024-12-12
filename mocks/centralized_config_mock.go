@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	centralizedconfiguration "github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/centralized-configuration"
+	centralizedconfiguration "github.com/konstellation-io/kai-gosdk/sdk/centralized-configuration"
 	mock "github.com/stretchr/testify/mock"
 )
 

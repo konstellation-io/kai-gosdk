@@ -3,7 +3,7 @@
 package modelregistry_test
 
 import (
-	modelregistry "github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/model-registry"
+	modelregistry "github.com/konstellation-io/kai-gosdk/sdk/model-registry"
 )
 
 func (s *SdkModelRegistryTestSuite) TestModelRegistry_ListModelVersions_ExpectOK() {

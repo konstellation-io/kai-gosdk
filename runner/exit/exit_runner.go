@@ -3,8 +3,8 @@ package exit
 import (
 	"strings"
 
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/runner/common"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk"
+	"github.com/konstellation-io/kai-gosdk/runner/common"
+	"github.com/konstellation-io/kai-gosdk/sdk"
 	"go.opentelemetry.io/otel/metric"
 
 	"github.com/go-logr/logr"

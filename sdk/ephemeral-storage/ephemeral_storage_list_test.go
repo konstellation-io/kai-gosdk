@@ -5,11 +5,11 @@ package objectstore_test
 import (
 	"fmt"
 
-	objectStore2 "github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/ephemeral-storage"
+	objectStore2 "github.com/konstellation-io/kai-gosdk/sdk/ephemeral-storage"
 
 	"github.com/spf13/viper"
 
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/errors"
+	"github.com/konstellation-io/kai-gosdk/internal/errors"
 )
 
 func (s *SdkObjectStoreTestSuite) TestObjectStore_ListObjectStoreNotInitialized_ExpectError() {

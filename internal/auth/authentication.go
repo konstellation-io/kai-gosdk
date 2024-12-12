@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/common"
+	"github.com/konstellation-io/kai-gosdk/internal/common"
 
 	"github.com/Nerzal/gocloak/v13"
 	"github.com/go-logr/logr"

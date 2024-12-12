@@ -6,16 +6,16 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/common"
+	"github.com/konstellation-io/kai-gosdk/internal/common"
 
-	centralizedConfiguration "github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk/centralized-configuration"
+	centralizedConfiguration "github.com/konstellation-io/kai-gosdk/sdk/centralized-configuration"
 
 	"github.com/go-logr/logr"
 	"github.com/go-logr/logr/testr"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/mocks"
+	"github.com/konstellation-io/kai-gosdk/mocks"
 )
 
 const (

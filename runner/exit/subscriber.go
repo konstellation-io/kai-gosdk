@@ -17,10 +17,10 @@ import (
 	"github.com/spf13/viper"
 	"google.golang.org/protobuf/proto"
 
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/common"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/internal/errors"
-	kai "github.com/konstellation-io/kai-sdk/go-sdk/v1/protos"
-	"github.com/konstellation-io/kai-sdk/go-sdk/v1/sdk"
+	"github.com/konstellation-io/kai-gosdk/internal/common"
+	"github.com/konstellation-io/kai-gosdk/internal/errors"
+	kai "github.com/konstellation-io/kai-gosdk/protos"
+	"github.com/konstellation-io/kai-gosdk/sdk"
 )
 
 const _subscriberLoggerName = "[SUBSCRIBER]"
@@ -106,7 +106,7 @@ func (er *Runner) processMessage(msg *nats.Msg) {
 	if err != nil {
 		errMsg := fmt.Sprintf("Error parsing msg.data coming from subject %s because is not a valid protobuf: %s",
 			msg.Subject, err)
-		er.processRunnerError(msg, errMsg, requestMsg.RequestId)
+		er.processRunnerError(msg, errMsg, requestMsg.GetRequestId())
 
 		return
 	}
@@ -117,17 +117,17 @@ func (er *Runner) processMessage(msg *nats.Msg) {
 		er.sdk.Logger.V(1).Info(fmt.Sprintf("%s execution time: %d ms", er.sdk.Metadata.GetProcess(), executionTime))
 
 		er.messagesMetric.Record(context.Background(), executionTime,
-			metric.WithAttributeSet(er.getMetricAttributes(requestMsg.RequestId)),
+			metric.WithAttributeSet(er.getMetricAttributes(requestMsg.GetRequestId())),
 		)
 	}()
 
 	er.getLoggerWithName().Info(fmt.Sprintf("New message received with subject %s",
 		msg.Subject))
 
-	handler := er.getResponseHandler(strings.ToLower(requestMsg.FromNode))
+	handler := er.getResponseHandler(strings.ToLower(requestMsg.GetFromNode()))
 	if handler == nil {
-		errMsg := fmt.Sprintf("Error missing handler for node %q", requestMsg.FromNode)
-		er.processRunnerError(msg, errMsg, requestMsg.RequestId)
+		errMsg := fmt.Sprintf("Error missing handler for node %q", requestMsg.GetFromNode())
+		er.processRunnerError(msg, errMsg, requestMsg.GetRequestId())
 
 		return
 	}
@@ -136,31 +136,31 @@ func (er *Runner) processMessage(msg *nats.Msg) {
 	hSdk := sdk.ShallowCopyWithRequest(&er.sdk, requestMsg)
 
 	if er.preprocessor != nil {
-		err := er.preprocessor(hSdk, requestMsg.Payload)
+		err := er.preprocessor(hSdk, requestMsg.GetPayload())
 		if err != nil {
 			errMsg := fmt.Sprintf("Error in node %q executing handler preprocessor for node %q: %s",
-				er.sdk.Metadata.GetProcess(), requestMsg.FromNode, err)
-			er.processRunnerError(msg, errMsg, requestMsg.RequestId)
+				er.sdk.Metadata.GetProcess(), requestMsg.GetFromNode(), err)
+			er.processRunnerError(msg, errMsg, requestMsg.GetRequestId())
 
 			return
 		}
 	}
 
-	err = handler(hSdk, requestMsg.Payload)
+	err = handler(hSdk, requestMsg.GetPayload())
 	if err != nil {
 		errMsg := fmt.Sprintf("Error in node %q executing handler for node %q: %s",
-			er.sdk.Metadata.GetProcess(), requestMsg.FromNode, err)
-		er.processRunnerError(msg, errMsg, requestMsg.RequestId)
+			er.sdk.Metadata.GetProcess(), requestMsg.GetFromNode(), err)
+		er.processRunnerError(msg, errMsg, requestMsg.GetRequestId())
 
 		return
 	}
 
 	if er.postprocessor != nil {
-		err := er.postprocessor(hSdk, requestMsg.Payload)
+		err := er.postprocessor(hSdk, requestMsg.GetPayload())
 		if err != nil {
 			errMsg := fmt.Sprintf("Error in node %q executing handler postprocessor for node %q: %s",
-				er.sdk.Metadata.GetProcess(), requestMsg.FromNode, err)
-			er.processRunnerError(msg, errMsg, requestMsg.RequestId)
+				er.sdk.Metadata.GetProcess(), requestMsg.GetFromNode(), err)
+			er.processRunnerError(msg, errMsg, requestMsg.GetRequestId())
 
 			return
 		}
@@ -248,7 +248,7 @@ func (er *Runner) getOutputSubject(channel string) string {
 func (er *Runner) prepareOutputMessage(msg []byte) ([]byte, error) {
 	maxSize, err := er.getMaxMessageSize()
 	if err != nil {
-		return nil, fmt.Errorf("error getting max message size: %s", err) //nolint:goerr113 // error is wrapped
+		return nil, fmt.Errorf("error getting max message size: %w", err)
 	}
 
 	lenMsg := int64(len(msg))
