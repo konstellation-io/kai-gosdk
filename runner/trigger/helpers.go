@@ -1,6 +1,7 @@
 package trigger
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"os/signal"
@@ -11,6 +12,11 @@ import (
 
 	"github.com/konstellation-io/kai-gosdk/runner/common"
 	"github.com/konstellation-io/kai-gosdk/sdk"
+)
+
+var (
+	ErrHandlerNotFound    = errors.New("response handler not found for the message with request id")
+	ErrInvalidHandlerType = errors.New("response handler is not of type chan *anypb.Any")
 )
 
 const (
@@ -56,8 +62,10 @@ func composeRunner(userRunner RunnerFunc) RunnerFunc {
 		kaiSDK.Logger.WithName(_runnerLoggerName).Info("Shutting down runner...")
 		kaiSDK.Logger.WithName(_runnerLoggerName).V(1).Info("Closing opened channels...")
 		runner.responseChannels.Range(func(key, value interface{}) bool {
-			close(value.(chan *anypb.Any))
-			kaiSDK.Logger.WithName(_runnerLoggerName).V(1).Info(fmt.Sprintf("Channel closed for request id %s", key))
+			close(value.(chan *anypb.Any)) //nolint:errcheck // We don't care about the error here
+			kaiSDK.Logger.WithName(_runnerLoggerName).V(1).Info(
+				fmt.Sprintf("Channel closed for identifier %q for request id %q", key, kaiSDK.GetRequestID()),
+			)
 
 			return true
 		})
@@ -71,13 +79,18 @@ func getResponseHandler(handlers *sync.Map) ResponseHandler {
 	return func(kaiSDK sdk.KaiSDK, response *anypb.Any) error {
 		// Unmarshal response to a KaiNatsMessage type
 		kaiSDK.Logger.WithName(_responseHandlerLoggerName).
-			Info(fmt.Sprintf("Message received with request id %s", kaiSDK.GetRequestID()))
+			Info(fmt.Sprintf("Message received with request id %q", kaiSDK.GetRequestID()))
 
-		responseHandler, ok := handlers.LoadAndDelete(kaiSDK.GetRequestID())
+		responseHandler, found := handlers.LoadAndDelete(kaiSDK.GetRequestID())
 
-		if ok {
-			responseHandler.(chan *anypb.Any) <- response
-			return nil
+		if !found {
+			return fmt.Errorf("%w %q", ErrHandlerNotFound, kaiSDK.GetRequestID())
+		}
+
+		if ch, ok := responseHandler.(chan *anypb.Any); ok {
+			ch <- response
+		} else {
+			return ErrInvalidHandlerType
 		}
 
 		kaiSDK.Logger.WithName(_responseHandlerLoggerName).V(1).Info(fmt.Sprintf("Undefined handler for the message with request id %s",

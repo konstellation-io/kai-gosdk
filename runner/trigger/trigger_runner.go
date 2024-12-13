@@ -59,7 +59,7 @@ func (tr *Runner) GetResponseChannel(requestID string) <-chan *anypb.Any {
 	tr.responseChannels.Store(requestID, make(chan *anypb.Any))
 	channel, _ := tr.responseChannels.Load(requestID)
 
-	return channel.(chan *anypb.Any)
+	return channel.(chan *anypb.Any) //nolint:errcheck // We don't care about the error here
 }
 
 func (tr *Runner) Run() {

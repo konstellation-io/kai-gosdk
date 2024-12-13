@@ -35,7 +35,7 @@ func (s *SdkPersistentStorageTestSuite) getContainer() testcontainers.Container 
 	ctx := context.Background()
 
 	req := testcontainers.ContainerRequest{
-		Image:        "minio/minio:latest",
+		Image:        "minio/minio:RELEASE.2023-09-30T07-02-29Z",
 		ExposedPorts: []string{"9000/tcp"},
 		Cmd: []string{
 			"server",
