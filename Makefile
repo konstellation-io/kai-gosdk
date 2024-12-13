@@ -17,7 +17,7 @@ generate_mocks: ## Generate mocks
 
 .PHONY: tidy
 tidy: ## Run golangci-lint, goimports and gofmt
-	golangci-lint run ./... && goimports -w  . && gofmt -s -w -e -d . && cd -
+	golangci-lint run ./... --config .github/.golangci.yml && goimports -w  . && gofmt -s -w -e -d . && cd -
 
 .PHONY: tests
 tests: ## Run integration and unit tests
