@@ -13,11 +13,11 @@ protos: ## Generate proto files
 
 .PHONY: generate_mocks
 generate_mocks: ## Generate mocks
-	go generate ./... && cd -
+	go generate ./...
 
 .PHONY: tidy
 tidy: ## Run golangci-lint, goimports and gofmt
-	golangci-lint run ./... --config .github/.golangci.yml && goimports -w  . && gofmt -s -w -e -d . && cd -
+	golangci-lint run ./... --config .github/.golangci.yml && goimports -w  . && gofmt -s -w -e -d .
 
 .PHONY: tests
 tests: ## Run integration and unit tests
