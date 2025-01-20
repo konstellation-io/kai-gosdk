@@ -85,31 +85,6 @@ func (s *SdkRunnerTestSuite) TestNewTaskRunner_WithoutDefaultHandler_ExpectPanic
 	}, "Undefined default handler")
 }
 
-func (s *SdkRunnerTestSuite) TestNewExitRunnerInitialization_ExpectOK() {
-	// Given
-	s.js.On("KeyValue", mock.AnythingOfType("string")).Return(mocks.NewKeyValueMock(s.T()), nil)
-	s.js.On("ObjectStore", mock.AnythingOfType("string")).Return(mocks.NewNatsObjectStoreMock(s.T()), nil)
-
-	// When
-	triggerRunner := runner.NewTestRunner(nil, &s.js).ExitRunner()
-	// Then
-	s.NotNil(triggerRunner)
-}
-
-func (s *SdkRunnerTestSuite) TestNewExitRunner_WithoutDefaultHandler_ExpectPanic() {
-	// Given
-	s.js.On("KeyValue", mock.AnythingOfType("string")).Return(mocks.NewKeyValueMock(s.T()), nil)
-	s.js.On("ObjectStore", mock.AnythingOfType("string")).Return(mocks.NewNatsObjectStoreMock(s.T()), nil)
-
-	// Then
-	s.Panicsf(func() {
-		// When
-		runner.NewTestRunner(nil, &s.js).
-			ExitRunner().
-			Run()
-	}, "Undefined default handler")
-}
-
 func (s *SdkRunnerTestSuite) TestNewRunner_MissingMandatoryKey() {
 	// Given
 	natsURL := viper.GetString(common.ConfigNatsURLKey)

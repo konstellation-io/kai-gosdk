@@ -8,7 +8,6 @@ import (
 
 	"github.com/go-logr/logr"
 	"github.com/go-logr/zapr"
-	"github.com/konstellation-io/kai-gosdk/runner/exit"
 	"github.com/konstellation-io/kai-gosdk/runner/task"
 	"github.com/konstellation-io/kai-gosdk/runner/trigger"
 	"github.com/nats-io/nats.go"
@@ -184,8 +183,4 @@ func (rn Runner) TriggerRunner() *trigger.Runner {
 
 func (rn Runner) TaskRunner() *task.Runner {
 	return task.NewTaskRunner(rn.logger, rn.nats, rn.jetstream)
-}
-
-func (rn Runner) ExitRunner() *exit.Runner {
-	return exit.NewExitRunner(rn.logger, rn.nats, rn.jetstream)
 }
